@@ -1,12 +1,399 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="th">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MAMA COCO</title>
+    <title>MAMA COCO - เว็บแนะนำตัว</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            color: #333;
+            line-height: 1.6;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        /* พื้นหลังวิดีโอ */
+        .video-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+        
+        .video-bg video {
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            object-fit: cover;
+        }
+        
+        /* ตัวกรองสีเพื่อให้อ่านข้อความได้ชัดเจน */
+        .video-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: -1;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            padding: 40px 0;
+            background: rgba(255, 255, 255, 0.85);
+            color: #333;
+            border-radius: 10px;
+            margin-bottom: 40px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            background: linear-gradient(90deg, #ff7e5f, #feb47b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .profiles {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .profile-card {
+            background: rgba(255, 255, 255, 0.85);
+            border-radius: 15px;
+            overflow: hidden;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+        }
+        
+        .profile-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+        
+        .profile-header {
+            padding: 25px;
+            text-align: center;
+            color: white;
+        }
+        
+        .mama-coco .profile-header {
+            background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
+        }
+        
+        .mamatomyamkun .profile-header {
+            background: linear-gradient(90deg, #43e97b 0%, #38f9d7 100%);
+        }
+        
+        .profile-img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 5px solid white;
+            margin-bottom: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .profile-name {
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+        }
+        
+        .profile-title {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .profile-content {
+            padding: 25px;
+        }
+        
+        .profile-section {
+            margin-bottom: 20px;
+        }
+        
+        .profile-section h3 {
+            color: #4facfe;
+            margin-bottom: 10px;
+            font-size: 1.3rem;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 5px;
+        }
+        
+        .mamatomyamkun .profile-section h3 {
+            color: #43e97b;
+        }
+        
+        .skills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .skill-tag {
+            background: #f0f8ff;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            color: #4facfe;
+            border: 1px solid #4facfe;
+        }
+        
+        .mamatomyamkun .skill-tag {
+            background: #f0fff4;
+            color: #43e97b;
+            border: 1px solid #43e97b;
+        }
+        
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .social-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #f0f0f0;
+            color: #555;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .social-icon:hover {
+            transform: scale(1.1);
+            background: #4facfe;
+            color: white;
+        }
+        
+        .mamatomyamkun .social-icon:hover {
+            background: #43e97b;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 30px 0;
+            margin-top: 40px;
+            border-top: 1px solid rgba(224, 224, 224, 0.5);
+            color: white;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+        }
+        
+        @media (max-width: 768px) {
+            .profiles {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .profile-card {
+                max-width: 100%;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .video-bg video {
+                /* ปรับปรุงการแสดงผลวิดีโอบนมือถือ */
+                width: 100%;
+                height: 100%;
+            }
+        }
+    </style>
 </head>
 <body>
-    <h1>Wlcome to My Website</h1>
-    <p>MAMATOMYAMKUN</p>
+    <!-- พื้นหลังวิดีโอ -->
+    <div class="video-bg">
+        <video autoplay muted loop playsinline>
+            <source src="https://i.makeagif.com/media/3-06-2018/n_-dQw.mp4" type="video/mp4">
+            <!-- รองรับเบราว์เซอร์ที่เก่ากว่า -->
+            <source src="https://i.makeagif.com/media/3-06-2018/n_-dQw.mp4" type="video/webm">
+            เบราว์เซอร์ของคุณไม่รองรับวิดีโอพื้นหลัง
+        </video>
+        <div class="video-overlay"></div>
+    </div>
+    
+    <div class="container">
+        <header>
+            <h1>MAMA COCO</h1>
+            <p class="subtitle">ยินดีต้อนรับสู่เว็บไซต์แนะนำตัวของเรา</p>
+        </header>
+        
+        <div class="profiles">
+            <!-- โปรไฟล์ของ MAMA COCO -->
+            <div class="profile-card mama-coco">
+                <div class="profile-header">
+                    <img src="582013618_770696116002732_9076770128836033755_n.jpg" alt="MAMA COCO" class="profile-img">
+                    <h2 class="profile-name">MAMA COCO</h2>
+                    <p class="profile-title">นักพัฒนาซอฟต์แวร์และดีไซน์เนอร์</p>
+                </div>
+                
+                <div class="profile-content">
+                    <div class="profile-section">
+                        <h3>เกี่ยวกับฉัน</h3>
+                        <p>สวัสดีครับ! ผมเป็นนักพัฒนาซอฟต์แวร์ที่มีประสบการณ์มากว่า 5 ปี ผมมีความเชี่ยวชาญในการพัฒนาเว็บแอปพลิเคชันและโมบายแอปพลิเคชัน ผมรักในการเรียนรู้เทคโนโลยีใหม่ๆ และพร้อมที่จะพัฒนาตัวเองอยู่เสมอ</p>
+                    </div>
+                    
+                    <div class="profile-section">
+                        <h3>ทักษะ</h3>
+                        <div class="skills">
+                            <span class="skill-tag">HTML/CSS</span>
+                            <span class="skill-tag">JavaScript</span>
+                            <span class="skill-tag">React</span>
+                            <span class="skill-tag">Node.js</span>
+                            <span class="skill-tag">UI/UX Design</span>
+                            <span class="skill-tag">Python</span>
+                        </div>
+                    </div>
+                    
+                    <div class="profile-section">
+                        <h3>ประสบการณ์การทำงาน</h3>
+                        <p><strong>บริษัท เทคโนโลยีไทย จำกัด</strong> (2561-2563)<br>
+                        ตำแหน่ง: นักพัฒนาซอฟต์แวร์</p>
+                        <p><strong>บริษัท สตาร์ทอัพไทย จำกัด</strong> (2564-ปัจจุบัน)<br>
+                        ตำแหน่ง: นักพัฒนาซอฟต์แวร์อาวุโส</p>
+                    </div>
+                    
+                    <div class="social-links">
+                        <a href="#" class="social-icon">FB</a>
+                        <a href="#" class="social-icon">IG</a>
+                        <a href="#" class="social-icon">IN</a>
+                        <a href="#" class="social-icon">GH</a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- โปรไฟล์ของ MAMATOMYAMKUN -->
+            <div class="profile-card mamatomyamkun">
+                <div class="profile-header">
+                    <img src="582512839_1509275867012010_2365039343714488984_n.jpg" alt="MAMATOMYAMKUN" class="profile-img">
+                    <h2 class="profile-name">MAMATOMYAMKUN</h2>
+                    <p class="profile-title">เชฟมืออาชีพและผู้ประกอบการร้านอาหาร</p>
+                </div>
+                
+                <div class="profile-content">
+                    <div class="profile-section">
+                        <h3>เกี่ยวกับฉัน</h3>
+                        <p>สวัสดีค่ะ! ดิฉันเป็นเชฟมืออาชีพที่มีความหลงใหลในการทำอาหารไทยโดยเฉพาะต้มยำกุ้ง ดิฉันมีประสบการณ์ในการทำงานในร้านอาหารระดับมิชลินและปัจจุบันเป็นเจ้าของร้านอาหารของตัวเอง</p>
+                    </div>
+                    
+                    <div class="profile-section">
+                        <h3>ทักษะ</h3>
+                        <div class="skills">
+                            <span class="skill-tag">อาหารไทย</span>
+                            <span class="skill-tag">อาหารนานาชาติ</span>
+                            <span class="skill-tag">มาเฟียหาดใหญ่</span>
+                            <span class="skill-tag">ใหญ่มากๆ</span>
+                            <span class="skill-tag">ผีหลอก</span>
+                            <span class="skill-tag">อาหารหมา</span>
+                        </div>
+                    </div>
+                    
+                    <div class="profile-section">
+                        <h3>ประสบการณ์การทำงาน</h3>
+                        <p><strong>ร้านอาหารมิชลิน 3 ดาว</strong> (2560-2562)<br>
+                        ตำแหน่ง: เชฟประจำส่วนอาหารไทย</p>
+                        <p><strong>ร้าน MAMATOMYAMKUN</strong> (2563-ปัจจุบัน)<br>
+                        ตำแหน่ง: เจ้าของและเชฟหลัก</p>
+                    </div>
+                    
+                    <div class="social-links">
+                        <a href="#" class="social-icon">FB</a>
+                        <a href="#" class="social-icon">IG</a>
+                        <a href="#" class="social-icon">YT</a>
+                        <a href="#" class="social-icon">TW</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>&copy; 2023 MAMA COCO - สร้างสรรค์ด้วยใจ</p>
+        </footer>
+    </div>
+
+    <script>
+        // ตรวจสอบและจัดการวิดีโอพื้นหลัง
+        document.addEventListener('DOMContentLoaded', function() {
+            const video = document.querySelector('.video-bg video');
+            
+            // ตั้งค่าให้วิดีโอเล่นอัตโนมัติและวนลูป
+            if (video) {
+                video.play().catch(function(error) {
+                    console.log('วิดีโออัตโนมัติถูกบล็อก:', error);
+                    // แสดงปุ่มเล่นถ้าวิดีโอถูกบล็อก
+                    const playButton = document.createElement('button');
+                    playButton.textContent = 'เล่นพื้นหลัง';
+                    playButton.style.position = 'fixed';
+                    playButton.style.bottom = '20px';
+                    playButton.style.right = '20px';
+                    playButton.style.zIndex = '1000';
+                    playButton.style.padding = '10px 15px';
+                    playButton.style.background = '#4facfe';
+                    playButton.style.color = 'white';
+                    playButton.style.border = 'none';
+                    playButton.style.borderRadius = '5px';
+                    playButton.style.cursor = 'pointer';
+                    
+                    playButton.addEventListener('click', function() {
+                        video.play();
+                        playButton.remove();
+                    });
+                    
+                    document.body.appendChild(playButton);
+                });
+            }
+        });
+    </script>
 </body>
 </html>
